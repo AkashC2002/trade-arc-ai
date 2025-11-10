@@ -1,11 +1,16 @@
-import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2, TrendingUp, TrendingDown } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Trash2, TrendingUp, TrendingDown } from "lucide-react";
 import { usePortfolio } from "@/hooks/usePortfolio";
+import { SentimentBadge } from "@/components/sentiment/SentimentBadge";
+import { Card } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 export const HoldingsTable = () => {
   const { holdings, isLoading, deleteHolding } = usePortfolio();
+  const navigate = useNavigate();
 
   if (isLoading) {
     return (
@@ -21,75 +26,79 @@ export const HoldingsTable = () => {
 
   return (
     <Card className="p-6 bg-gradient-card border-border/50">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold text-foreground">Your Holdings</h2>
-      </div>
-
-      <div className="overflow-x-auto">
+      <h2 className="text-xl font-bold text-foreground mb-6">Holdings</h2>
+      <div className="rounded-md border border-border">
         <Table>
           <TableHeader>
-            <TableRow className="border-border/50 hover:bg-transparent">
+            <TableRow className="hover:bg-transparent">
               <TableHead className="text-muted-foreground">Asset</TableHead>
-              <TableHead className="text-muted-foreground text-right">Price</TableHead>
-              <TableHead className="text-muted-foreground text-right">Holdings</TableHead>
-              <TableHead className="text-muted-foreground text-right">Value</TableHead>
-              <TableHead className="text-muted-foreground text-right">P/L</TableHead>
-              <TableHead className="text-muted-foreground text-right">24h</TableHead>
-              <TableHead className="text-muted-foreground text-right">Actions</TableHead>
+              <TableHead className="text-muted-foreground">Sentiment</TableHead>
+              <TableHead className="text-muted-foreground">Quantity</TableHead>
+              <TableHead className="text-muted-foreground">Avg Buy Price</TableHead>
+              <TableHead className="text-muted-foreground">Current Price</TableHead>
+              <TableHead className="text-muted-foreground">Value</TableHead>
+              <TableHead className="text-muted-foreground">P/L</TableHead>
+              <TableHead className="text-muted-foreground">24h</TableHead>
+              <TableHead className="text-muted-foreground"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {holdings.map((holding) => (
-              <TableRow key={holding.id} className="border-border/50 hover:bg-muted/5">
+            {holdings.map((holding, index) => (
+              <motion.tr
+                key={holding.id}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                className="hover:bg-muted/5 border-b border-border cursor-pointer"
+                onClick={() => navigate(`/coin/${holding.symbol}`)}
+              >
                 <TableCell>
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="text-xs font-bold text-primary">{holding.symbol.slice(0, 2)}</span>
-                    </div>
-                    <div>
-                      <p className="font-semibold text-foreground">{holding.symbol}</p>
-                      <p className="text-xs text-muted-foreground">{holding.name}</p>
-                    </div>
+                  <div>
+                    <p className="font-semibold text-foreground">{holding.symbol}</p>
+                    <p className="text-sm text-muted-foreground">{holding.name}</p>
                   </div>
                 </TableCell>
-                <TableCell className="text-right font-medium text-foreground">
-                  ${holding.currentPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                <TableCell>
+                  <SentimentBadge symbol={holding.symbol} />
                 </TableCell>
-                <TableCell className="text-right text-foreground">
-                  {holding.quantity} {holding.symbol}
-                </TableCell>
-                <TableCell className="text-right font-semibold text-foreground">
-                  ${holding.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </TableCell>
-                <TableCell className="text-right">
-                  <div className={holding.pnl >= 0 ? "text-success" : "text-destructive"}>
-                    <p className="font-semibold">
-                      ${Math.abs(holding.pnl).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                    </p>
-                    <p className="text-xs">{holding.pnlPercent >= 0 ? "+" : ""}{holding.pnlPercent.toFixed(2)}%</p>
+                <TableCell className="text-foreground">{holding.quantity}</TableCell>
+                <TableCell className="text-foreground">${holding.buyPrice.toLocaleString()}</TableCell>
+                <TableCell className="text-foreground">${holding.currentPrice.toLocaleString()}</TableCell>
+                <TableCell className="text-foreground font-semibold">${holding.value.toLocaleString()}</TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-1">
+                    {holding.pnl >= 0 ? (
+                      <TrendingUp className="w-4 h-4 text-success" />
+                    ) : (
+                      <TrendingDown className="w-4 h-4 text-destructive" />
+                    )}
+                    <span className={holding.pnl >= 0 ? "text-success font-semibold" : "text-destructive font-semibold"}>
+                      {holding.pnl >= 0 ? '+' : ''}{holding.pnlPercent.toFixed(2)}%
+                    </span>
                   </div>
                 </TableCell>
-                <TableCell className="text-right">
-                  <div className={`flex items-center justify-end gap-1 ${holding.change24h >= 0 ? "text-success" : "text-destructive"}`}>
-                    {holding.change24h >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-                    <span className="font-medium">{Math.abs(holding.change24h).toFixed(2)}%</span>
-                  </div>
+                <TableCell>
+                  <Badge 
+                    variant={holding.change24h >= 0 ? "default" : "destructive"}
+                    className="font-semibold"
+                  >
+                    {holding.change24h >= 0 ? '+' : ''}{holding.change24h}%
+                  </Badge>
                 </TableCell>
-                <TableCell className="text-right">
-                  <div className="flex items-center justify-end gap-2">
-                    <Button variant="ghost" size="sm">
-                      <Edit className="w-4 h-4" />
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="sm"
-                      onClick={() => deleteHolding(holding.id)}
-                    >
-                      <Trash2 className="w-4 h-4 text-destructive" />
-                    </Button>
-                  </div>
+                <TableCell>
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteHolding(holding.id);
+                    }}
+                    className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
                 </TableCell>
-              </TableRow>
+              </motion.tr>
             ))}
           </TableBody>
         </Table>

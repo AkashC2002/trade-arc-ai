@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { Card } from "@/components/ui/card";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { PortfolioSummary } from "@/components/dashboard/PortfolioSummary";
 import { HoldingsTable } from "@/components/dashboard/HoldingsTable";
@@ -7,7 +6,11 @@ import { PortfolioChart } from "@/components/dashboard/PortfolioChart";
 import { AIInsights } from "@/components/dashboard/AIInsights";
 import { NewsPanel } from "@/components/dashboard/NewsPanel";
 import { AddHoldingDialog } from "@/components/dashboard/AddHoldingDialog";
-import { PlusCircle, TrendingUp, Wallet } from "lucide-react";
+import { PortfolioAnalytics } from "@/components/analytics/PortfolioAnalytics";
+import { ProfitHeatmap } from "@/components/analytics/ProfitHeatmap";
+import { MarketMoodGauge } from "@/components/sentiment/MarketMoodGauge";
+import { PlusCircle, Wallet } from "lucide-react";
+import { motion } from "framer-motion";
 
 const Dashboard = () => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -34,18 +37,37 @@ const Dashboard = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8 space-y-6">
-        <PortfolioSummary />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <PortfolioSummary />
+        </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-6">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="lg:col-span-2 space-y-6"
+          >
             <PortfolioChart />
             <HoldingsTable />
-          </div>
+            <ProfitHeatmap />
+          </motion.div>
 
-          <div className="space-y-6">
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="space-y-6"
+          >
+            <MarketMoodGauge />
+            <PortfolioAnalytics />
             <AIInsights />
             <NewsPanel />
-          </div>
+          </motion.div>
         </div>
       </main>
 
