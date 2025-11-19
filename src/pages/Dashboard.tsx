@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { PortfolioSummary } from "@/components/dashboard/PortfolioSummary";
 import { HoldingsTable } from "@/components/dashboard/HoldingsTable";
@@ -9,13 +9,21 @@ import { AddHoldingDialog } from "@/components/dashboard/AddHoldingDialog";
 import { PortfolioAnalytics } from "@/components/analytics/PortfolioAnalytics";
 import { ProfitHeatmap } from "@/components/analytics/ProfitHeatmap";
 import { MarketMoodGauge } from "@/components/sentiment/MarketMoodGauge";
-import { PlusCircle, Wallet, TrendingUp } from "lucide-react";
+import { PlusCircle, Wallet, TrendingUp, LogOut } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const Dashboard = () => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const navigate = useNavigate();
+  const { user, signOut, loading } = useAuth();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate("/auth");
+    }
+  }, [user, loading, navigate]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -31,13 +39,16 @@ const Dashboard = () => {
               </h1>
             </div>
             <div className="flex gap-2">
-              <Button onClick={() => navigate("/earn")} variant="outline" className="gap-2">
+              <Button onClick={() => navigate("/earn")} variant="outline" className="gap-2 border-border hover:bg-secondary">
                 <TrendingUp className="w-4 h-4" />
                 Earn & Yield
               </Button>
-              <Button onClick={() => setIsAddDialogOpen(true)} className="gap-2">
+              <Button onClick={() => setIsAddDialogOpen(true)} className="gap-2 bg-primary hover:bg-primary/90">
                 <PlusCircle className="w-4 h-4" />
                 Add Holding
+              </Button>
+              <Button onClick={signOut} variant="outline" size="icon" className="border-border hover:bg-destructive/10">
+                <LogOut className="w-4 h-4" />
               </Button>
             </div>
           </div>
