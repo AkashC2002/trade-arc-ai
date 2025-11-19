@@ -9,11 +9,13 @@ import { AddHoldingDialog } from "@/components/dashboard/AddHoldingDialog";
 import { PortfolioAnalytics } from "@/components/analytics/PortfolioAnalytics";
 import { ProfitHeatmap } from "@/components/analytics/ProfitHeatmap";
 import { MarketMoodGauge } from "@/components/sentiment/MarketMoodGauge";
-import { PlusCircle, Wallet } from "lucide-react";
+import { PlusCircle, Wallet, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-background">
@@ -28,10 +30,16 @@ const Dashboard = () => {
                 CryptoFolio AI
               </h1>
             </div>
-            <Button onClick={() => setIsAddDialogOpen(true)} className="gap-2">
-              <PlusCircle className="w-4 h-4" />
-              Add Holding
-            </Button>
+            <div className="flex gap-2">
+              <Button onClick={() => navigate("/earn")} variant="outline" className="gap-2">
+                <TrendingUp className="w-4 h-4" />
+                Earn & Yield
+              </Button>
+              <Button onClick={() => setIsAddDialogOpen(true)} className="gap-2">
+                <PlusCircle className="w-4 h-4" />
+                Add Holding
+              </Button>
+            </div>
           </div>
         </div>
       </header>
