@@ -1,1 +1,10 @@
 project_id = "tcsbvvqvyuyuhyaouifr"
+
+[functions.ai-predict]
+verify_jwt = false
+
+[functions.sentiment-analysis]
+verify_jwt = false
+
+[functions.crypto-chat]
+verify_jwt = false
