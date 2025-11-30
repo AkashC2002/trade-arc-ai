@@ -9,13 +9,16 @@ import { AddHoldingDialog } from "@/components/dashboard/AddHoldingDialog";
 import { PortfolioAnalytics } from "@/components/analytics/PortfolioAnalytics";
 import { ProfitHeatmap } from "@/components/analytics/ProfitHeatmap";
 import { MarketMoodGauge } from "@/components/sentiment/MarketMoodGauge";
-import { PlusCircle, Wallet, TrendingUp, LogOut } from "lucide-react";
+import { MarketWidgets } from "@/components/market/MarketWidgets";
+import { AIChatbot } from "@/components/chat/AIChatbot";
+import { PlusCircle, Wallet, TrendingUp, LogOut, Bot } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 
 const Dashboard = () => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
   const navigate = useNavigate();
   const { user, signOut, loading } = useAuth();
 
@@ -39,11 +42,15 @@ const Dashboard = () => {
               </h1>
             </div>
             <div className="flex gap-2">
+              <Button onClick={() => setIsChatbotOpen(true)} variant="outline" className="gap-2 border-border hover:bg-secondary">
+                <Bot className="w-4 h-4" />
+                AI Assistant
+              </Button>
               <Button onClick={() => navigate("/earn")} variant="outline" className="gap-2 border-border hover:bg-secondary">
                 <TrendingUp className="w-4 h-4" />
                 Earn & Yield
               </Button>
-              <Button onClick={() => setIsAddDialogOpen(true)} className="gap-2 bg-primary hover:bg-primary/90">
+              <Button onClick={() => setIsAddDialogOpen(true)} className="gap-2 bg-gradient-primary hover:opacity-90">
                 <PlusCircle className="w-4 h-4" />
                 Add Holding
               </Button>
@@ -71,6 +78,7 @@ const Dashboard = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="lg:col-span-2 space-y-6"
           >
+            <MarketWidgets />
             <PortfolioChart />
             <HoldingsTable />
             <ProfitHeatmap />
@@ -91,6 +99,21 @@ const Dashboard = () => {
       </main>
 
       <AddHoldingDialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen} />
+      <AIChatbot isOpen={isChatbotOpen} onClose={() => setIsChatbotOpen(false)} />
+      
+      {/* Floating AI Button */}
+      {!isChatbotOpen && (
+        <motion.button
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => setIsChatbotOpen(true)}
+          className="fixed right-6 bottom-6 w-14 h-14 bg-gradient-primary rounded-full shadow-glow flex items-center justify-center z-40 hover:shadow-accent transition-shadow"
+        >
+          <Bot className="w-6 h-6 text-primary-foreground" />
+        </motion.button>
+      )}
     </div>
   );
 };
