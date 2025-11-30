@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -7,10 +8,11 @@ import { ProductCard } from "@/components/earn/ProductCard";
 import { WealthManagementWidget } from "@/components/earn/WealthManagementWidget";
 import { useEarnProducts } from "@/hooks/useEarnProducts";
 import { useEarnPositions } from "@/hooks/useEarnPositions";
-import { Wallet, Search } from "lucide-react";
+import { Wallet, Search, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Earn = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [matchMyAssets, setMatchMyAssets] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -32,13 +34,23 @@ const Earn = () => {
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-lg bg-gradient-primary flex items-center justify-center">
-                <Wallet className="w-6 h-6 text-primary-foreground" />
+            <div className="flex items-center gap-4">
+              <Button
+                variant="ghost"
+                onClick={() => navigate(-1)}
+                className="gap-2"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back
+              </Button>
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 rounded-lg bg-gradient-primary flex items-center justify-center">
+                  <Wallet className="w-6 h-6 text-primary-foreground" />
+                </div>
+                <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+                  Crypto Earn & Yield Center
+                </h1>
               </div>
-              <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                Crypto Earn & Yield Center
-              </h1>
             </div>
           </div>
         </div>
