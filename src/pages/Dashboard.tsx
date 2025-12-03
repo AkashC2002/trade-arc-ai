@@ -11,7 +11,7 @@ import { ProfitHeatmap } from "@/components/analytics/ProfitHeatmap";
 import { MarketMoodGauge } from "@/components/sentiment/MarketMoodGauge";
 import { MarketWidgets } from "@/components/market/MarketWidgets";
 import { AIChatbot } from "@/components/chat/AIChatbot";
-import { PlusCircle, Wallet, TrendingUp, LogOut, Bot, Globe } from "lucide-react";
+import { PlusCircle, Wallet, TrendingUp, LogOut, Bot, Globe, Brain } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -49,6 +49,10 @@ const Dashboard = () => {
               <Button onClick={() => navigate("/market-intelligence")} variant="outline" className="gap-2 border-border hover:bg-secondary">
                 <Globe className="w-4 h-4" />
                 Market Intel
+              </Button>
+              <Button onClick={() => navigate("/strategy")} variant="outline" className="gap-2 border-border hover:bg-secondary">
+                <Brain className="w-4 h-4" />
+                Strategy
               </Button>
               <Button onClick={() => navigate("/earn")} variant="outline" className="gap-2 border-border hover:bg-secondary">
                 <TrendingUp className="w-4 h-4" />

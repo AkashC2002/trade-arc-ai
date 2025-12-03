@@ -14,6 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
+      algorithm_signals: {
+        Row: {
+          candle_time: string
+          close_price: number
+          created_at: string
+          ema15: number
+          ema9: number
+          high_price: number
+          id: string
+          low_price: number
+          metadata: Json | null
+          open_price: number
+          signal_type: string
+          slope_angle: number
+          symbol: string
+          timeframe: string
+          user_id: string | null
+        }
+        Insert: {
+          candle_time: string
+          close_price: number
+          created_at?: string
+          ema15: number
+          ema9: number
+          high_price: number
+          id?: string
+          low_price: number
+          metadata?: Json | null
+          open_price: number
+          signal_type: string
+          slope_angle: number
+          symbol: string
+          timeframe?: string
+          user_id?: string | null
+        }
+        Update: {
+          candle_time?: string
+          close_price?: number
+          created_at?: string
+          ema15?: number
+          ema9?: number
+          high_price?: number
+          id?: string
+          low_price?: number
+          metadata?: Json | null
+          open_price?: number
+          signal_type?: string
+          slope_angle?: number
+          symbol?: string
+          timeframe?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       holdings: {
         Row: {
           buy_date: string

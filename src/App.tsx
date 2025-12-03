@@ -9,6 +9,7 @@ import CoinDetail from "./pages/CoinDetail";
 import Earn from "./pages/Earn";
 import Auth from "./pages/Auth";
 import MarketIntelligence from "./pages/MarketIntelligence";
+import StrategyEngine from "./pages/StrategyEngine";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/coin/:symbol" element={<CoinDetail />} />
           <Route path="/earn" element={<Earn />} />
           <Route path="/market-intelligence" element={<MarketIntelligence />} />
+          <Route path="/strategy" element={<StrategyEngine />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
